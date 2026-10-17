@@ -1,16 +1,13 @@
-"""Tiny demo app used as the scan target for the Dependency Advisory Triage agent.
-
-The pinned versions in requirements.txt are deliberately old and vulnerable:
-- requests 2.19.0 -> the safe upgrade keeps this code working (CI passes)   -> TC1
-- Jinja2 2.10     -> the safe upgrade is Jinja2 3.x, which removed
-                     `jinja2.Markup`, so this import breaks (CI fails)       -> TC3
+"""Demo scan target. Deliberately old, vulnerable pins:
+- requests 2.28.0 -> safe upgrade keeps code working, CI passes (TC1)
+- Werkzeug 2.2.2  -> safe upgrade is 3.x, which removed werkzeug.urls.url_quote, CI fails (TC3)
 """
 import requests
-from jinja2 import Markup, Template
+from werkzeug.urls import url_quote
 
 
-def render_greeting(name):
-    return Template("Hello {{ name }}!").render(name=Markup.escape(name))
+def quote_path(path):
+    return url_quote(path)
 
 
 def fetch_status(url):
